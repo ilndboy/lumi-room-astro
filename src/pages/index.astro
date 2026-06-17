@@ -1,11 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
+import Desk from '../components/Desk.astro';
 import { getWindowData } from '../data/window';
+import { getDeskData, deskVoiceParagraph } from '../data/desk';
 
 const data = await getWindowData();
+const deskEntries = getDeskData();
 ---
 
 <Layout title="the window — lumi.stonemanor.us">
   <Window data={data} />
+  <Desk entries={deskEntries} voice={deskVoiceParagraph} />
 </Layout>
