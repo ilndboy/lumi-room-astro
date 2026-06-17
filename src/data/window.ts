@@ -1,9 +1,9 @@
 import SunCalc from 'suncalc';
 
-// Stone Manor, NH — placeholder coords (Concord/Bedford area, NH);
-// Cail to confirm actual town for precise lat/long.
-const LATITUDE = 43.20;
-const LONGITUDE = -71.54;
+// Stone Manor, NH — Deerfield town-center coords (intentionally town-level,
+// not house-level, since the page is public).
+const LATITUDE = 43.14;
+const LONGITUDE = -71.24;
 const TIMEZONE = 'America/New_York';
 
 // ─── Open-Meteo current weather ───
