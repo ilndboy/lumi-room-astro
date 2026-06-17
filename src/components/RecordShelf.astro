@@ -1,0 +1,183 @@
+---
+import { nowPlaying, aboutTheStack, earlierLine } from '../data/record-shelf';
+---
+
+<section class="record-shelf-section" id="the-record-shelf">
+
+  <div class="record-shelf-content">
+
+    <h2 class="section-heading">the record shelf</h2>
+
+    <!-- Now Playing block -->
+    <div class="now-playing-block">
+      <span class="label">Now Playing</span>
+      <h3 class="stack-name">{nowPlaying.stackName}</h3>
+      <span class="stack-week">{nowPlaying.weekOf}</span>
+      <div class="stylus-track" aria-hidden="true"></div>
+      <p class="vibe-note">{nowPlaying.vibeNote}</p>
+    </div>
+
+    <!-- About the Stack block -->
+    <div class="about-block">
+      <span class="label">About the Stack</span>
+      <p class="about-text">{aboutTheStack}</p>
+    </div>
+
+    <!-- Earlier block -->
+    <div class="earlier-block">
+      <span class="label">Earlier</span>
+      <p class="earlier-text"><em>{earlierLine}</em></p>
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+  /* ─── The Record Shelf Section ─── */
+  .record-shelf-section {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem 4.5rem;
+    background: var(--cedar-dark);
+    color: var(--cream);
+    overflow: hidden;
+  }
+
+  /* ─── Content wrapper ─── */
+  .record-shelf-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 42rem;
+    width: 100%;
+  }
+
+  /* ─── Section Heading ─── */
+  .section-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    margin-bottom: 3.5rem;
+    text-align: center;
+    line-height: 1.2;
+    opacity: 0.95;
+  }
+
+  /* ─── Uppercase labels (Space Grotesk, small) ─── */
+  .label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+    margin-bottom: 0.6rem;
+    line-height: 1.6;
+  }
+
+  /* ─── Now Playing Block ─── */
+  .now-playing-block {
+    width: 100%;
+    margin-bottom: 3rem;
+  }
+
+  .stack-name {
+    font-family: var(--serif);
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: 500;
+    font-style: normal;
+    color: var(--cream);
+    line-height: 1.35;
+    opacity: 0.95;
+    margin-bottom: 0.15rem;
+  }
+
+  .stack-week {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    color: var(--glass-dim);
+    line-height: 1.6;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ─── Stylus Track — thin amber accent under the title ─── */
+  .stylus-track {
+    width: 3.5rem;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      var(--amber),
+      var(--amber-dim) 70%,
+      transparent 100%
+    );
+    opacity: 0.55;
+    margin-bottom: 1rem;
+  }
+
+  .vibe-note {
+    font-family: var(--serif);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: var(--glass);
+    line-height: 1.7;
+    max-width: 34rem;
+  }
+
+  /* ─── About the Stack Block ─── */
+  .about-block {
+    width: 100%;
+    margin-bottom: 3rem;
+  }
+
+  .about-text {
+    font-family: var(--serif);
+    font-size: clamp(1rem, 2.2vw, 1.1875rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--cream);
+    max-width: 38rem;
+    opacity: 0.88;
+  }
+
+  /* ─── Earlier Block ─── */
+  .earlier-block {
+    width: 100%;
+  }
+
+  .earlier-text {
+    font-family: var(--serif);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--glass);
+    line-height: 1.7;
+    opacity: 0.7;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 600px) {
+    .record-shelf-section {
+      padding: 3rem 1.25rem 3.5rem;
+    }
+    .vibe-note,
+    .about-text,
+    .earlier-text {
+      max-width: 100%;
+    }
+  }
+</style>

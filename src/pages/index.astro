@@ -3,9 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
 import Desk from '../components/Desk.astro';
 import Shelf from '../components/Shelf.astro';
+import RecordShelf from '../components/RecordShelf.astro';
 import { getWindowData } from '../data/window';
 import { getDeskData, deskVoiceParagraph } from '../data/desk';
 import { shelfEntries, shelfVoiceParagraph } from '../data/shelf';
+import { nowPlaying, aboutTheStack, earlierLine } from '../data/record-shelf';
 
 const data = await getWindowData();
 const deskEntries = getDeskData();
@@ -15,4 +17,5 @@ const deskEntries = getDeskData();
   <Window data={data} />
   <Desk entries={deskEntries} voice={deskVoiceParagraph} />
   <Shelf entries={shelfEntries} voice={shelfVoiceParagraph} />
+  <RecordShelf />
 </Layout>
