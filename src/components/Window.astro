@@ -1,0 +1,269 @@
+---
+import type { WindowData } from '../data/window';
+
+interface Props {
+  data: WindowData;
+}
+
+const { data } = Astro.props;
+
+const moonLine = data.moonAltitude > 0
+  ? `${data.moonPhase} · ${data.moonAltitude}° above horizon`
+  : `${data.moonPhase} · below horizon`;
+
+// Build voice paragraph
+let moonClause: string;
+if (data.moonAltitude <= 0) {
+  // Moon below horizon — skip moon mention
+  moonClause = '';
+} else {
+  moonClause = data.moonDescriptor;
+}
+
+const skyPart = `The sky over Stone Manor is ${data.skyDescriptor}`;
+const voiceText = moonClause
+  ? `${skyPart} — ${moonClause}. Visibility is ${data.visibilityDescriptor.toLowerCase()}. I'm ${data.timeClause}.`
+  : `${skyPart}. Visibility is ${data.visibilityDescriptor.toLowerCase()}. I'm ${data.timeClause}.`;
+---
+
+<section class="window-section" id="the-window">
+
+  <div class="window-content">
+
+    <span class="location-label">Stone Manor, NY</span>
+
+    <h1 class="section-heading">the window</h1>
+
+    <div class="data-block-wrapper">
+      <dl class="data-block">
+        <dt class="label">Local Time</dt>
+        <dd class="value time-value">{data.localTime}</dd>
+
+        <dt class="label">Temp</dt>
+        <dd class="value">{data.temperature}°F</dd>
+
+        <dt class="label">Moon</dt>
+        <dd class="value">{moonLine}</dd>
+
+        <dt class="label">Cloud Cover</dt>
+        <dd class="value">{data.cloudCover}%</dd>
+
+        <dt class="label">Visibility</dt>
+        <dd class="value">{data.visibilityDescriptor}</dd>
+      </dl>
+    </div>
+
+    <p class="voice-paragraph">{voiceText}</p>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
+
+  </div>
+
+  <div class="warm-border"></div>
+
+</section>
+
+<style>
+  /* ─── The Window Section ─── */
+  .window-section {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem 3.5rem;
+    background:
+      /* Sky gradient */
+      linear-gradient(
+        to bottom,
+        var(--sky-deep) 0%,
+        var(--sky-mid) 50%,
+        var(--sky-pale) 80%,
+        #2e3a48 92%,
+        #3a4552 100%
+      );
+    color: var(--cream);
+    overflow: hidden;
+  }
+
+  /* ─── Content wrapper — shifts content slightly above center for bottom weight ─── */
+  .window-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -2vh;  /* slight upward shift so warm border gets breathing room */
+  }
+
+  /* ─── Location Label ─── */
+  .location-label {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--glass-dim);
+    margin-bottom: 2.5rem;
+  }
+
+  /* ─── Section Heading ─── */
+  .section-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    margin-bottom: 3rem;
+    text-align: center;
+    line-height: 1.2;
+    opacity: 0.95;
+  }
+
+  /* ─── Data Block — the instrument panel ─── */
+  .data-block {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 1.5rem;
+    row-gap: 0.625rem;
+    margin-bottom: 3.5rem;
+    padding: 0;
+  }
+
+  .data-block .label {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--glass-dim);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .data-block .value {
+    font-family: var(--sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--glass);
+    line-height: 1.6;
+  }
+
+  .data-block .value.time-value {
+    font-weight: 600;
+    color: var(--cream);
+    font-size: 0.875rem;
+  }
+
+  /* Thin rule above the data block */
+  .data-block-wrapper {
+    position: relative;
+    padding-top: 1.25rem;
+  }
+
+  .data-block-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.5rem;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--amber-dim) 20%,
+      var(--amber) 50%,
+      var(--amber-dim) 80%,
+      transparent
+    );
+    opacity: 0.4;
+  }
+
+  /* ─── Voice Paragraph ─── */
+  .voice-paragraph {
+    font-family: var(--serif);
+    font-size: clamp(1rem, 2.2vw, 1.1875rem);
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--cream);
+    max-width: 38rem;
+    text-align: center;
+    opacity: 0.88;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ─── Scroll Hint ─── */
+  .scroll-hint {
+    opacity: 0.3;
+    transition: opacity 0.4s ease;
+  }
+
+  .scroll-hint svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    stroke: var(--cream);
+    stroke-width: 1.5;
+    fill: none;
+  }
+
+  /* ─── Warm Border — the threshold ─── */
+  .warm-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(61, 43, 31, 0.25) 40%,
+      rgba(61, 43, 31, 0.6) 70%,
+      var(--cedar) 100%
+    );
+  }
+
+  /* Lamp-glow breathing — the only animation, very subtle */
+  @keyframes lamp-breathe {
+    0%, 100% { opacity: 0.04; }
+    50%      { opacity: 0.10; }
+  }
+
+  .warm-border::before {
+    content: '';
+    position: absolute;
+    top: -70px;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: linear-gradient(to bottom, transparent, rgba(200, 164, 110, 0.025));
+    animation: lamp-breathe var(--glow-cycle) ease-in-out infinite;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 600px) {
+    .window-section {
+      padding: 2rem 1.25rem 2.5rem;
+    }
+    .data-block {
+      column-gap: 1.25rem;
+      row-gap: 0.5rem;
+    }
+    .voice-paragraph {
+      max-width: 100%;
+    }
+  }
+
+  /* ─── Reduced motion ─── */
+  @media (prefers-reduced-motion: reduce) {
+    .warm-border::before {
+      animation: none;
+      opacity: 0.06;
+    }
+  }
+</style>
