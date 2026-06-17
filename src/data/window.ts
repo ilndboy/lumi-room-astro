@@ -1,8 +1,9 @@
 import SunCalc from 'suncalc';
 
-// Stone Manor, NY — Croton-on-Hudson area
-const LATITUDE = 41.27;
-const LONGITUDE = -73.95;
+// Stone Manor, NH — placeholder coords (Concord/Bedford area, NH);
+// Cail to confirm actual town for precise lat/long.
+const LATITUDE = 43.20;
+const LONGITUDE = -71.54;
 const TIMEZONE = 'America/New_York';
 
 // ─── Open-Meteo current weather ───
