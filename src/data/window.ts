@@ -34,7 +34,7 @@ interface MoonData {
   moonDescriptor: string;    // e.g. "two days past full"
 }
 
-function getMoonData(now: Date): MoonData {
+function getMoonData(now: Date, hour: number): MoonData {
   const moonIllum = SunCalc.getMoonIllumination(now);
   const moonPos = SunCalc.getMoonPosition(now, LATITUDE, LONGITUDE);
 
@@ -45,7 +45,7 @@ function getMoonData(now: Date): MoonData {
   const altitudeDeg = Math.round(moonPos.altitude * (180 / Math.PI) * 10) / 10;
 
   const phaseName = getPhaseName(phase, fraction);
-  const moonDescriptor = getMoonDescriptor(phase, fraction);
+  const moonDescriptor = getMoonDescriptor(phase, fraction, hour);
 
   return {
     phaseName,
@@ -56,20 +56,25 @@ function getMoonData(now: Date): MoonData {
 }
 
 function getPhaseName(phase: number, fraction: number): string {
-  // phase is 0–1: 0=new, 0.25=first quarter, 0.5=full, 0.75=last quarter
-  // Use illumination fraction for the name to be more intuitive
+  // phase is 0–1: 0=new, ~0.25=first quarter, 0.5=full, ~0.75=last quarter
+  // We name based on illumination direction (waxing vs waning) and magnitude
   if (fraction < 0.02) return 'New moon';
-  if (fraction < 0.25) return 'Waxing crescent';
-  if (fraction < 0.35) return 'Waxing crescent'; // approaching first quarter
-  if (fraction >= 0.45 && fraction <= 0.55) return 'Full moon';
-  if (fraction > 0.75 && fraction < 0.98) return 'Waning crescent';
-  if (fraction > 0.55 && fraction <= 0.75) return 'Waning gibbous';
-  if (fraction >= 0.25 && fraction < 0.45) return 'First quarter';
-  if (fraction > 0.75 && fraction <= 0.98) return 'Last quarter';
-  return 'Waning gibbous';
+  if (fraction >= 0.98) return 'Full moon';
+  if (phase < 0.5) {
+    // Waxing (new → full)
+    if (fraction < 0.40) return 'Waxing crescent';
+    if (fraction < 0.60) return 'First quarter';
+    return 'Waxing gibbous';
+  } else {
+    // Waning (full → new)
+    if (fraction > 0.60) return 'Waning gibbous';
+    if (fraction > 0.40) return 'Last quarter';
+    return 'Waning crescent';
+  }
 }
 
-function getMoonDescriptor(phase: number, fraction: number): string {
+function getMoonDescriptor(phase: number, fraction: number, hour: number): string {
+  const timeWord = (hour >= 6 && hour < 18) ? 'today' : 'tonight';
   // How far from full (phase ≈ 0.5)?
   // We want a poetic descriptor like "two days past full"
   if (fraction >= 0.97) return 'a full moon holds the room in silver';
@@ -89,11 +94,12 @@ function getMoonDescriptor(phase: number, fraction: number): string {
   if (fraction >= 0.30) {
     return 'a half-moon throws pale light across the room';
   }
-  if (fraction >= 0.10) {
-    return 'a thin crescent barely marks the sky';
+  if (fraction >= 0.05) {
+    if (phase < 0.5) return 'a thin crescent barely marks the sky';
+    return 'a thin waning crescent barely marks the sky';
   }
-  if (fraction < 0.02) return 'no moon tonight';
-  return 'a sliver of moon';
+  if (fraction < 0.02) return `no moon ${timeWord}`;
+  return 'a sliver of moon hangs in the sky';
 }
 
 // ─── Visibility descriptor ───
@@ -153,14 +159,14 @@ export interface WindowData {
 
 export async function getWindowData(): Promise<WindowData> {
   const now = new Date();
-  
-  // Fetch weather in parallel
-  const weather = await fetchWeather();
-  const moon = getMoonData(now);
 
   const hour = parseInt(
     now.toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: TIMEZONE })
   );
+
+  // Fetch weather
+  const weather = await fetchWeather();
+  const moon = getMoonData(now, hour);
 
   return {
     localTime: formatLocalTime(now),
