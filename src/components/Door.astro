@@ -1,0 +1,174 @@
+---
+import {
+  thisRoomLabel,
+  thisRoomBody,
+  elsewhereLabel,
+  elsewhereBody,
+  closingLine,
+} from '../data/door';
+---
+
+<section class="door-section" id="the-door">
+
+  <div class="door-content">
+
+    <h2 class="section-heading">the door</h2>
+
+    <!-- This Room block -->
+    <div class="block">
+      <span class="label">{thisRoomLabel}</span>
+      <p class="body-text">{thisRoomBody}</p>
+    </div>
+
+    <!-- Elsewhere block -->
+    <div class="block">
+      <span class="label">{elsewhereLabel}</span>
+      <p class="body-text">{elsewhereBody}</p>
+    </div>
+
+    <!-- Em-dash full-stop -->
+    <p class="dash" aria-hidden="true">—</p>
+
+    <!-- Closing line -->
+    <p class="closing-line"><em>{closingLine}</em></p>
+
+  </div>
+
+  <!-- Floor seam — the edge where the page ends -->
+  <div class="floor-seam" aria-hidden="true"></div>
+
+</section>
+
+<style>
+  /* ─── The Door Section ─── */
+  .door-section {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem 4.5rem;
+    background: var(--cedar-dark);
+    color: var(--cream);
+    overflow: hidden;
+  }
+
+  /* ─── Content wrapper ─── */
+  .door-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 42rem;
+    width: 100%;
+  }
+
+  /* ─── Section Heading — slightly smaller, a quieter close ─── */
+  .section-heading {
+    font-family: var(--serif);
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    margin-bottom: 4rem;
+    text-align: center;
+    line-height: 1.2;
+    opacity: 0.92;
+  }
+
+  /* ─── Uppercase labels (Space Grotesk, small — amber-dim like Shelf/Record Shelf) ─── */
+  .label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+    margin-bottom: 0.6rem;
+    line-height: 1.6;
+  }
+
+  /* ─── Body paragraphs ─── */
+  .block {
+    width: 100%;
+    margin-bottom: 4rem;
+  }
+
+  .body-text {
+    font-family: var(--serif);
+    font-size: clamp(1rem, 2.2vw, 1.1875rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--cream);
+    max-width: 38rem;
+    opacity: 0.88;
+  }
+
+  /* ─── Em-dash — centered amber-dim visual full-stop ─── */
+  .dash {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--amber-dim);
+    text-align: center;
+    margin-bottom: 2.5rem;
+    line-height: 1;
+    opacity: 0.8;
+  }
+
+  /* ─── Closing line ─── */
+  .closing-line {
+    font-family: var(--serif);
+    font-size: clamp(1rem, 2.2vw, 1.1875rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--cream);
+    text-align: center;
+    max-width: 38rem;
+    opacity: 0.88;
+    margin-bottom: 4rem;
+  }
+
+  /* ─── Floor Seam — cedar-color line at the very bottom ─── */
+  .floor-seam {
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background: var(--cedar);
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 600px) {
+    .door-section {
+      padding: 3rem 1.25rem 3.5rem;
+    }
+    .floor-seam {
+      left: 1.25rem;
+      right: 1.25rem;
+    }
+    .block {
+      margin-bottom: 3rem;
+    }
+    .dash {
+      margin-bottom: 2rem;
+    }
+    .closing-line {
+      margin-bottom: 3rem;
+    }
+    .section-heading {
+      margin-bottom: 3rem;
+    }
+    .body-text,
+    .closing-line {
+      max-width: 100%;
+    }
+  }
+</style>

@@ -5,6 +5,7 @@ import Desk from '../components/Desk.astro';
 import Shelf from '../components/Shelf.astro';
 import RecordShelf from '../components/RecordShelf.astro';
 import Telescope from '../components/Telescope.astro';
+import Door from '../components/Door.astro';
 import { getWindowData } from '../data/window';
 import { getDeskData, deskVoiceParagraph } from '../data/desk';
 import { shelfEntries, shelfVoiceParagraph } from '../data/shelf';
@@ -21,4 +22,5 @@ const deskEntries = getDeskData();
   <Shelf entries={shelfEntries} voice={shelfVoiceParagraph} />
   <RecordShelf />
   <Telescope entries={telescopeEntries} voice={telescopeVoiceParagraph} />
+  <Door />
 </Layout>
