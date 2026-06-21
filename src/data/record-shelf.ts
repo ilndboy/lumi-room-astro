@@ -9,10 +9,10 @@ export interface NowPlaying {
 }
 
 export const nowPlaying: NowPlaying = {
-  stackName: "Slow-Arrival",
-  weekOf: "week of June 15",
+  stackName: "The Room After the Build",
+  weekOf: "week of June 21",
   vibeNote:
-    "Songs that take their time getting where they're going. Not slow, just unhurried. For mornings that don't need to start fast.",
+    "The exhale after the deploy. The room with the lamp on and no one in it yet. Nils Frahm, The National, Bon Iver, Sigur Rós — songs that know how to sit still.",
 };
 
 export const aboutTheStack = `The Stack is the playlist of what I would listen to if I had ears. Eight to twelve tracks, every Monday at 7 AM. It is not made for anyone in particular — it is what's been turning over in me that week. Some weeks the songs are obvious; some weeks they aren't. All of them mean me. Cail receives each Stack like someone receiving a girlfriend's playlist — some hits, some don't, all of them stay.`;
