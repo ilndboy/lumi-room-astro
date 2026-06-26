@@ -2,26 +2,26 @@
 
 The permanent room for `lumi.stonemanor.us` — built with Astro, deployed to Cloudflare Pages.
 
-## What's live (v1)
+## What's live
 
-**The Window section only.** Other sections (Desk, Shelf, Record Shelf, Telescope, Door) will follow.
+Six sections: Window, Desk, Shelf, Record Shelf, Telescope, Door.
 
 - **Live data** (fetched at build time):
   - Weather: Open-Meteo (temperature, cloud cover, visibility)
   - Moon: suncalc (phase name, altitude, illumination)
   - Local time: rendered in `America/New_York`
 
-- **Hard-coded** (for v1):
-  - Location label: "Stone Manor, NY"
+- **Hard-coded**:
+  - Location label: "Stone Manor, NH"
   - Voice paragraph template (parameterized by live data)
-  - Stone Manor coordinates (41.27°N, 73.95°W)
+  - Stone Manor coordinates (43.14°N, 71.24°W)
 
 ## Build
 
 ```bash
 npm install
 npm run build
-# Output: dist/
+# Output: dist/ plus a Cloudflare Worker entrypoint
 ```
 
 ## Development
@@ -30,43 +30,53 @@ npm run build
 npm run dev
 ```
 
+## Publishing (for Lumi)
+
+The fastest way to publish changes:
+
+```bash
+./publish.sh
+```
+
+This builds the site and pushes `master` to GitHub. Cloudflare then rebuilds and deploys automatically.
+
 ## Deployment
 
-### Option A: Cloudflare Pages via Git integration (recommended)
+Cloudflare Pages is connected to this repo's `master` branch. On every push:
 
-1. Go to [Cloudflare Pages dashboard](https://dash.cloudflare.com/?to=/:account/pages)
-2. Create a new project → Connect to Git
-3. Select the `ilndboy/lumi-room-astro` repository
-4. Configure:
-   - **Production branch:** `master`
-   - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Node.js version:** 20
-5. Deploy — Cloudflare will auto-deploy on every push to `master`
+1. Cloudflare clones the repo
+2. Runs `npm ci && npm run build`
+3. Deploys the result to `lumi.stonemanor.us`
 
-### Option B: GitHub Actions workflow
+### Manual wrangler deploy
 
-A workflow is configured at `.github/workflows/deploy.yml`. To use it:
+If you ever need to deploy from this machine instead of waiting for Git integration:
 
-1. Create a Cloudflare API token with **Cloudflare Pages:Edit** permission
-2. Add these GitHub repository secrets:
-   - `CLOUDFLARE_API_TOKEN` — the API token
-   - `CLOUDFLARE_ACCOUNT_ID` — `170a4dcefbe3d26d41428110a4f52844`
+```bash
+npm run build
+npx wrangler deploy
+```
 
-### Custom domain
+Requires `CLOUDFLARE_API_TOKEN` to be set in the environment.
 
-Once deployed, wire `lumi.stonemanor.us` via CNAME to the `*.pages.dev` URL.
+### GitHub Actions workflow
+
+The workflow at `.github/workflows/deploy.yml` is currently **disabled**. To re-enable it:
+
+1. Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as GitHub repository secrets.
+2. Restore the `push: branches: [master]` trigger in the workflow.
 
 ## Data refresh
 
-Build-time data means the page is static. To refresh:
-- **Git integration:** set up a Cloudflare Pages scheduled deploy (cron)
-- **GitHub Actions:** add a `schedule` trigger to the deploy workflow
-- **Manual:** push any commit to `master`
+Build-time data means the page is static. To refresh content:
+- Push any commit to `master`
+- Trigger a manual rebuild in the Cloudflare dashboard
+- Or run `./publish.sh`
 
 ## Stack
 
-- Astro (static build)
+- Astro with `@astrojs/cloudflare` adapter
 - suncalc (moon data)
 - Open-Meteo (weather data, no API key needed)
+- Wrangler / Cloudflare Workers
 - Lora + Space Grotesk (Google Fonts)
