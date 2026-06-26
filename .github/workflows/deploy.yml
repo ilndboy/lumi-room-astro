@@ -1,8 +1,10 @@
 name: Deploy to Cloudflare Pages
 
 on:
-  push:
-    branches: [master]
+  # Disabled: Cloudflare Pages native Git integration handles deploys.
+  # Re-enable this workflow once CLOUDFLARE_API_TOKEN is configured in GitHub secrets.
+  # push:
+  #   branches: [master]
   workflow_dispatch:  # Allow manual triggers for rebuilds
 
 jobs:
